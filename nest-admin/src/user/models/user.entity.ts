@@ -13,6 +13,6 @@ export class User {
   email: string;
 
   @Column()
-  @Exclude()
+  @Exclude() // @UseInterceptors(ClassSerializerInterceptor) 인터셉터를 통해 password가 제거됨
   password: string;
 }
