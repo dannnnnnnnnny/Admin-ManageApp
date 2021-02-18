@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './models/user.entity';
@@ -15,10 +15,15 @@ export class UserService {
   }
 
   async create(data): Promise<User> {
-    return this.userRepository.save(data);
+    try {
+      const user = await this.userRepository.save(data);
+      return user;
+    } catch (error) {
+      throw new BadRequestException('이미 존재하는 유저입니다.');
+    }
   }
 
   async findOne(condition): Promise<User> {
-    return this.userRepository.findOne(condition);
+    return await this.userRepository.findOne(condition);
   }
 }

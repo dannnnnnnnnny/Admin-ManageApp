@@ -5,6 +5,7 @@ import { RegisterDto } from './models/register.dto';
 import { JwtService } from '@nestjs/jwt';
 import { Request, Response } from 'express';
 
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller()
 export class AuthController {
   constructor(
@@ -31,7 +32,7 @@ export class AuthController {
   async login(
     @Body('email') email: string,
     @Body('password') password: string,
-    @Res() response: Response
+    @Res({ passthrough: true }) response: Response
   ) {
     const user = await this.userService.findOne({ email });
     if (!user) {
@@ -49,7 +50,6 @@ export class AuthController {
     return user;
   }
 
-  @UseInterceptors(ClassSerializerInterceptor)
   @Get('user')
   async user(@Req() request: Request) {
     const cookie = request.cookies.jwt;
@@ -57,5 +57,14 @@ export class AuthController {
     const data = await this.jwtService.verifyAsync(cookie); // { id, iat, exp }
 
     return this.userService.findOne({ id: data.id });
+  }
+
+  @Post('logout')
+  async logout(@Res({ passthrough: true }) response: Response) {
+    response.clearCookie('jwt');
+
+    return {
+      message: '로그아웃 성공'
+    };
   }
 }
