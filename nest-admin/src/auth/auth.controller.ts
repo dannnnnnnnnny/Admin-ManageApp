@@ -26,6 +26,7 @@ export class AuthController {
       nickname: body.nickname,
       email: body.email,
       password: hashed,
+      role: { id: 3 }
     });
   }
 
