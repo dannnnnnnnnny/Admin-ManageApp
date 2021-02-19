@@ -8,4 +8,7 @@ export class UserCreateDto {
   @IsEmail()
   email: string;
 
+  @IsNotEmpty()
+  // tslint:disable-next-line: variable-name
+  role_id: number;
 }
