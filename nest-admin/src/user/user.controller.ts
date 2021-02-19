@@ -1,4 +1,4 @@
-import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, Query, UseGuards, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, Query, Req, UseGuards, UseInterceptors } from '@nestjs/common';
 import { User } from './models/user.entity';
 import { UserService } from './user.service';
 import * as bcrypt from 'bcryptjs';
@@ -6,13 +6,16 @@ import { UserCreateDto } from './models/user-create.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { UserUpdateDto } from './models/user-update.dto';
 import { PaginatedResult } from 'src/common/paginated-result.interface';
+import { AuthService } from 'src/auth/auth.service';
+import { Request } from 'express';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @UseGuards(AuthGuard)
 @Controller('users')
 export class UserController {
   constructor(
-    private userService: UserService
+    private userService: UserService,
+    private authService: AuthService
   ) {}
 
   @Get()
@@ -36,6 +39,38 @@ export class UserController {
   @Get(':id')
   async get(@Param('id') id: number) {
     return this.userService.findOne({ id }, ['role']);
+  }
+
+  @Put('info')
+  async updateInfo(
+    @Body() body: UserUpdateDto,
+    @Req() request: Request
+    ) {
+    const id = await this.authService.userId(request);
+    await this.userService.update(id, body);
+
+    return this.userService.findOne({ id }, ['role']);
+  }
+
+  @Put('password')
+  async updatePassword(
+    @Req() request: Request,
+    @Body('password') password: string,
+    // tslint:disable-next-line: variable-name
+    @Body('password_confirm') password_confirm: string,
+  ) {
+    if (password !== password_confirm) {
+      throw new BadRequestException('패스워드가 일치하지 않습니다.');
+    }
+
+    const id = await this.authService.userId(request);
+    const hash = await bcrypt.hash(password, 12);
+
+    await this.userService.update(id, {
+      password: hash
+    });
+
+    return this.userService.findOne(id, ['role']);
   }
 
   @Put(':id')
