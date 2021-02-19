@@ -1,58 +1,28 @@
 import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AbstractService } from 'src/common/abstract.service';
+import { PaginatedResult } from 'src/common/paginated-result.interface';
 import { Repository } from 'typeorm';
 import { User } from './models/user.entity';
 
 @Injectable()
-export class UserService {
+export class UserService extends AbstractService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>
-  ) {}
-
-  async all(): Promise<User[]> {
-    return await this.userRepository.find();
+  ) {
+    super(userRepository);
   }
 
-  async paginate(page: number = 1): Promise<any> {
-    const take = 15;
-
-    const [users, total] = await this.userRepository.findAndCount({
-      take,
-      skip: (page - 1) * take
-    });
+  async paginate(page: number = 1, relations = []): Promise<PaginatedResult> {
+    const { data, meta } = await super.paginate(page, relations);
 
     return {
-      data: users.map((user) => {
-        const { password, ...data } = user;
-        return data;
+      data: data.map((user) => {
+        const { password, ...other } = user; // password 지우고 return
+        return other;
       }),
-      meta: {
-        total,
-        page,
-        last_page: Math.ceil(total / take)
-      }
+      meta
     }
-  }
-
-  async create(data): Promise<User> {
-    try {
-      const user = await this.userRepository.save(data);
-      return user;
-    } catch (error) {
-      throw new BadRequestException('이미 존재하는 유저입니다.');
-    }
-  }
-
-  async findOne(condition): Promise<User> {
-    return await this.userRepository.findOne(condition);
-  }
-
-  async update(id: number, data): Promise<any> {
-    return this.userRepository.update(id, data);
-  }
-
-  async delete(id: number): Promise<any> {
-    return this.userRepository.delete(id);
   }
 }

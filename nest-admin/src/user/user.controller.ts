@@ -5,6 +5,7 @@ import * as bcrypt from 'bcryptjs';
 import { UserCreateDto } from './models/user-create.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { UserUpdateDto } from './models/user-update.dto';
+import { PaginatedResult } from 'src/common/paginated-result.interface';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @UseGuards(AuthGuard)
@@ -15,8 +16,8 @@ export class UserController {
   ) {}
 
   @Get()
-  async all(@Query('page') page: number = 1): Promise<User[]> {
-    return await this.userService.paginate(page);
+  async all(@Query('page') page: number = 1): Promise<PaginatedResult> {
+    return await this.userService.paginate(page, ['role']);
   }
 
   @Post()
@@ -34,7 +35,7 @@ export class UserController {
 
   @Get(':id')
   async get(@Param('id') id: number) {
-    return this.userService.findOne({ id });
+    return this.userService.findOne({ id }, ['role']);
   }
 
   @Put(':id')
