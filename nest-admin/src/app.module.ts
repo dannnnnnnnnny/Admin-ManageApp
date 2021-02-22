@@ -7,6 +7,7 @@ import { RoleModule } from './role/role.module';
 import { PermissionModule } from './permission/permission.module';
 import { ProductModule } from './product/product.module';
 import { OrderModule } from './order/order.module';
+import { ImageuploadModule } from './imageupload/imageupload.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { OrderModule } from './order/order.module';
     PermissionModule,
     ProductModule,
     OrderModule,
+    ImageuploadModule,
   ]
 })
 export class AppModule {}

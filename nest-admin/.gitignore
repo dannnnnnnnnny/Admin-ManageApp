@@ -3,6 +3,7 @@
 /node_modules
 /.dbdata
 /uploads/*
+.env
 
 # Logs
 logs

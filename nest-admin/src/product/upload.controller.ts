@@ -28,6 +28,7 @@ export class UploadController {
     @Param('path') path,
     @Res() res: Response
     ) {
+      console.log(path);
       res.sendFile(path, { root: 'uploads' });
   }
 }
