@@ -20,7 +20,7 @@ export class UserController {
 
   @Get()
   async all(@Query('page') page: number = 1): Promise<PaginatedResult> {
-    return await this.userService.paginate(page, ['role']);
+    return this.userService.paginate(page, ['role']);
   }
 
   @Post()

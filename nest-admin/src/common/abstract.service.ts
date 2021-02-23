@@ -9,7 +9,7 @@ export abstract class AbstractService {
   ) {}
 
   async all(relations = []): Promise<any[]> {
-    return await this.repository.find({ relations });
+    return this.repository.find({ relations });
   }
 
   async paginate(page: number = 1, relations = []): Promise<PaginatedResult> {
@@ -41,7 +41,7 @@ export abstract class AbstractService {
   }
 
   async findOne(condition, relations = []): Promise<any> {
-    return await this.repository.findOne(condition, { relations });
+    return this.repository.findOne(condition, { relations });
   }
 
   async update(id: number, data): Promise<any> {
