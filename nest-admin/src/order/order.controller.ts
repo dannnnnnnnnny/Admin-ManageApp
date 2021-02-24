@@ -1,7 +1,8 @@
-import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import { ClassSerializerInterceptor, Controller, Get, Query, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { OrderService } from './order.service';
 
+@UseInterceptors(ClassSerializerInterceptor) // class-transformer의 Exclude를 사용하기 위해 인터셉터 사용
 @UseGuards(AuthGuard)
 @Controller()
 export class OrderController {
