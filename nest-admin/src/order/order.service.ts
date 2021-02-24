@@ -20,7 +20,7 @@ export class OrderService extends AbstractService {
     return {
       data: data.map((order: Order) => ({
         id: order.id,
-        name: order.username,
+        user: order.username,
         total: order.total,
         created_at: order.created_at,
         order_items: order.order_items,

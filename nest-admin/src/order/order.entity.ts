@@ -1,6 +1,6 @@
-import { Exclude, Expose } from "class-transformer";
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { OrderItem } from "./order-item.entity";
+import { Exclude, Expose } from 'class-transformer';
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { OrderItem } from './order-item.entity';
 
 @Entity('orders')
 export class Order {
