@@ -7,9 +7,9 @@ export class AuthService {
   constructor(private jwtService: JwtService) {}
 
   async userId(request: Request): Promise<number> {
-    const cookie = request.cookies.jwt;
+    const jwt = request.cookies.jwt;
 
-    const data = await this.jwtService.verifyAsync(cookie); // { id, iat, exp }
+    const data = await this.jwtService.verifyAsync(jwt); // { id, iat, exp } 형태의 값이 리턴
 
     return data.id;
   }

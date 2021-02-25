@@ -49,7 +49,7 @@ export class AuthController {
 
     const jwt = await this.jwtService.signAsync({ id: user.id });
 
-    response.cookie('jwt', jwt, { httpOnly: true }); // res 응답객체를 통해 쿠키에 값 저장
+    response.cookie('jwt', jwt, { httpOnly: true }); // res 응답객체를 통해 쿠키에 'jwt'란 이름으로 jwt 저장
 
     return user;
   }
