@@ -2,7 +2,7 @@ import { ClassSerializerInterceptor, Controller, Get, Post, Query, Res, UseGuard
 import { AuthGuard } from 'src/auth/auth.guard';
 import { OrderService } from './order.service';
 import { Response } from 'express';
-import { Parser } from 'json2csv'; 
+import { Parser } from 'json2csv';
 import { Order } from './order.entity';
 import { OrderItem } from './order-item.entity';
 

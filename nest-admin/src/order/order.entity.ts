@@ -20,6 +20,7 @@ export class Order {
   created_at: string;
 
   @OneToMany(() => OrderItem, orderItem => orderItem.order)
+  // tslint:disable-next-line: variable-name
   order_items: OrderItem[];
 
   // Expose 데코레이터를 이용해서 nickname과 email을 합쳐서 반환!, 변수명에 따라 반환되는 값도 달라짐 ({ ..., "username" : "nickname email" })
