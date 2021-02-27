@@ -2,6 +2,7 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 import { AuthService } from 'src/auth/auth.service';
+import { Role } from 'src/role/role.entity';
 import { RoleService } from 'src/role/role.service';
 import { UserService } from 'src/user/user.service';
 
@@ -25,9 +26,12 @@ export class PermissionGuard implements CanActivate {
 
     const id = await this.authService.userId(request);
     const user = await this.userService.findOne({ id }, ['role']);
-    const role = await this.roleService.findOne({id: user.role.id }, ['permissions']);
+    const role: Role = await this.roleService.findOne({id: user.role.id }, ['permissions']);
 
-    console.log(role);
-    return true;
+    if (request.method === 'GET') {
+      return role.permissions.some(p => (p.name === `view_${access}`) || (p.name === `edit_${access}`));
+    }
+
+    return role.permissions.some(p => (p.name === `edit_${access}`)); // 등록된 @hasPermission() 데코레이터의 string이 해당 유저의 permissions와 일치하는지 확인 (일치하지 않으면 403 Forbidden)
   }
 }

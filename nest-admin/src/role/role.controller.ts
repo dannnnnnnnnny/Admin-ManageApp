@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Get, Param } from '@nestjs/common';
 import { Post, Put } from '@nestjs/common/decorators/http/request-mapping.decorator';
+import { HasPermission } from 'src/permission/has-permission.decorator';
 import { RoleService } from './role.service';
 
 @Controller('roles')
@@ -7,11 +8,13 @@ export class RoleController {
   constructor(private roleService: RoleService) {}
 
   @Get()
+  @HasPermission('roles')
   async all() {
     return this.roleService.all(['permissions']);
   }
 
   @Post()
+  @HasPermission('roles')
   async create(
     @Body('name') name: string,
     @Body('permissions') ids: number[]
@@ -27,6 +30,7 @@ export class RoleController {
   }
 
   @Get(':id')
+  @HasPermission('roles')
   async get(@Param('id') id: number) {
     return this.roleService.findOne({ id }, ['permissions']);
   }
@@ -49,6 +53,7 @@ export class RoleController {
   }
 
   @Delete(':id')
+  @HasPermission('roles')
   async delete(@Param('id') id: number) {
     return this.roleService.delete(id);
   }

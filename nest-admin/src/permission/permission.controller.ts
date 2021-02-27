@@ -9,7 +9,6 @@ export class PermissionController {
   constructor(private readonly permssionService: PermissionService) {}
 
   @Get()
-  @HasPermission('view_permissions')
   async all() {
     return this.permssionService.all();
   }
