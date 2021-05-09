@@ -15,11 +15,11 @@ import { PermissionGuard } from './permission/permission.guard';
   imports: [
     UserModule,
     TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'db', // docker-compose.yml db (컨테이너의 Database)
-      port: 3306,
-      username: 'root',
-      password: 'root',
+      type: 'postgres',
+      host: 'localhost', // docker-compose.yml db (컨테이너의 Database)
+      port: 5432,
+      username: 'postgres',
+      password: '12345678',
       database: 'admin',
       autoLoadEntities: true,
       synchronize: true,
